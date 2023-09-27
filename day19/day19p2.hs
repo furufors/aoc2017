@@ -23,8 +23,8 @@ tile :: Map -> State -> Cell
 tile m s = if xok && yok
            then m!!(ypos s)!!(xpos s)
            else Empty
-    where yok = ypos s < (length m)
-          xok = xpos s < (length $ m!!(ypos s))
+    where yok = ypos s >= 0 && ypos s < (length m)
+          xok = xpos s >= 0 && xpos s < (length $ m!!(ypos s))
 
 -- s is current position
 runTubes :: State -> (State -> Cell) -> String
