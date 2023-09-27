@@ -39,19 +39,11 @@ runTubes s a = runTubes' s
             Horiz -> runTubes' . continue $ s
             Cross -> let above = a (up s)
                          leftOf = a (left s)
-                     in case dir s of
-                            W -> if cellIsLetter above || above == Vert
-                                 then runTubes' . continue $ s { dir = N}
-                                 else runTubes' . continue $ s { dir = S}
-                            N -> if cellIsLetter leftOf || leftOf == Horiz
-                                 then runTubes' . continue $ s { dir = W}
-                                 else runTubes' . continue $ s { dir = E}
-                            E -> if cellIsLetter above || above == Vert
-                                 then runTubes' . continue $ s { dir = N}
-                                 else runTubes' . continue $ s { dir = S}
-                            S -> if cellIsLetter leftOf || leftOf == Horiz
-                                 then runTubes' . continue $ s { dir = W}
-                                 else runTubes' . continue $ s { dir = E}
+                         hasAbove = cellIsLetter above || above == Vert
+                         hasLeftOf = cellIsLetter leftOf || leftOf == Horiz
+                         vCont = let dir' = if hasAbove then N else S in runTubes' . continue $ s { dir = dir' }
+                         hCont = let dir' = if hasLeftOf then W else E in runTubes' . continue $ s { dir = dir' }
+                     in if dir s `elem` [W,E] then vCont else hCont
 
 cellIsLetter :: Cell -> Bool
 cellIsLetter (Letter _) = True
