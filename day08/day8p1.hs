@@ -51,11 +51,6 @@ parseCond = try (string " < " >> return (<))
 
 readNum :: Parsec String () Int
 readNum = do
-    b <- try neg <|> (return False)
+    b <- try (string "-" >> return True) <|> (return False)
     n <- read <$> many digit
     return $ if b then (-1 * n) else n
-
-neg :: Parsec String () Bool
-neg = do
-    string "-"
-    return True
